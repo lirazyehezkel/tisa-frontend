@@ -2,6 +2,7 @@ import React from 'react';
 import {Switch, Route} from "react-router-dom";
 import {Routes} from '../constants/routes';
 import {Redirect} from "react-router";
+import Browse from "./Browse/Browse";
 
 const AppSwitchRoutes = () => {
     return <Switch>
@@ -9,9 +10,7 @@ const AppSwitchRoutes = () => {
             <Redirect to={Routes.BROWSE}/>
         </Route>
         <Route exact path={Routes.BROWSE}>
-            <div>
-                Browse
-            </div>
+            <Browse/>
         </Route>
         <Route path={Routes.FLIGHT_DETAILS}>
             <div>

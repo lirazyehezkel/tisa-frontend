@@ -1,0 +1,121 @@
+.browse-content {
+    justify-content: center;
+    display: flex;
+    height: 607px;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+}
+
+.blue-bkg {
+    background: rgba(66, 163, 242, 0.45);
+    height: 350px;
+    width: 70%;
+    border-radius: 0 0 0 200px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.filter-box {
+    background: linear-gradient(
+            179.24deg
+            , #617CF6 64.54%, rgba(255, 255, 255, 0) 194.06%);
+    height: 500px;
+    z-index: 1;
+    border-radius: 4px;
+    width: 400px;
+    padding: 0 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.top-filter-box-layout {
+    display: flex;
+    padding: 30px 0;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.top-filter-box-layout-left {
+    width: 75%;
+    text-align: left;
+}
+
+.from-filter {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.to-filter {
+    padding: 10px;
+    border-top: 0.3px #ffffff38 solid;
+    display: flex;
+    align-items: center;
+}
+
+.switch-img {
+    height: 30px;
+    cursor: pointer;
+}
+
+.date-input {
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.1);
+    padding: 5px;
+    border-radius: 40px;
+    color: white;
+    /*font-weight: bold;*/
+    font-size: 15px;
+    padding-left: 10px;
+    width: 145px;
+}
+
+.boarding-date-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.boarding-date-title {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #CCCCCC;
+}
+
+.searchContainer {
+    display: flex;
+    padding-bottom: 35px;
+    justify-content: center;
+}
+.searchButton {
+    width: 70%;
+    padding: 10px;
+    border: 1px #ffffff45 solid;
+    border-radius: 50px;
+    background-color: #ffffff1c;
+}
+
+.passengers {
+    display: flex;
+    align-items: center;
+}
+
+.passengers img {
+    cursor: pointer;
+    height: 24px;
+}
+
+.passengersAccount {
+    margin: 0 15px;
+    font-size: 14px;
+    width: 60px;
+}
+
+.passengersAccountNumber {
+    margin-right: 5px;
+    font-size: 21px;
+}
