@@ -1,26 +1,30 @@
 import './App.css';
-import React from 'react';
+import React, {useState} from 'react';
 import {BrowserRouter as Router} from "react-router-dom";
 import AppSwitchRoutes from "./AppSwitchRoutes";
 import logo from '../assets/images/tisa-logo.png';
+import LoginModal from "./LoginModal/LoginModal";
 
-const App = ()  => {
+const App = () => {
 
-  return (
-      <Router>
-        <div className="App">
-            <div className="appHeader">
-                <div>
-                    <img className="logo" alt="logo" src={logo}/>
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+    return (
+        <Router>
+            <div className="App">
+                <div className="appHeader">
+                    <div>
+                        <img className="logo" alt="logo" src={logo}/>
+                    </div>
+                    <div>
+                        <button className="blueButton" onClick={() => setIsLoginModalOpen(true)}>Sign in</button>
+                    </div>
                 </div>
-                <div>
-                    <button className="blueButton">Sign in</button>
-                </div>
+                <AppSwitchRoutes/>
+                <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)}/>
             </div>
-            <AppSwitchRoutes/>
-        </div>
-      </Router>
-  );
+        </Router>
+    );
 }
 
 export default App;

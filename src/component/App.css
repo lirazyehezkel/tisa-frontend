@@ -31,15 +31,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 20px;
+  padding: 10px 20px;
   color: white;
   background: #627ef7;
   font-family: 'Source Sans Pro', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
   font-size: 16px;
   font-weight: bold;
-  border-radius: 15px;
+  border-radius: 20px;
   cursor: pointer;
   border: none;
   transition: background .3s ease;
   outline: none;
+  box-shadow: 0 0 10px 0 #627ef765;
 }
