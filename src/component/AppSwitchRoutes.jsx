@@ -3,6 +3,7 @@ import {Switch, Route} from "react-router-dom";
 import {Routes} from '../constants/routes';
 import {Redirect} from "react-router";
 import Browse from "./Browse/Browse";
+import Profile from "./Profile/Profile";
 
 const AppSwitchRoutes = () => {
     return <Switch>
@@ -18,9 +19,7 @@ const AppSwitchRoutes = () => {
             </div>
         </Route>
         <Route path={Routes.PROFILE}>
-            <div>
-                profile
-            </div>
+            <Profile/>
         </Route>
         <Route path={Routes.AIRLINE}>
             <div>

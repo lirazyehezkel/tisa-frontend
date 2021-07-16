@@ -6,7 +6,7 @@ body{
 body {
   font-family: 'Source Sans Pro', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
   font-weight: 400;
-  color: #fff;
+  color: #090b14;
   /*background-color: #313346;*/
   background: #EAF0FF;
   -webkit-font-smoothing: antialiased;
@@ -25,6 +25,7 @@ body {
 
 .logo {
   height: 70px;
+  cursor: pointer;
 }
 
 .blueButton {
@@ -43,4 +44,16 @@ body {
   transition: background .3s ease;
   outline: none;
   box-shadow: 0 0 10px 0 #627ef765;
+}
+
+.profileIcon {
+  height: 35px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.helloUser {
+  display: flex;
+  align-items: center;
+  color: #002071;
 }

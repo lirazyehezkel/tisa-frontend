@@ -1,0 +1,90 @@
+.profileHeader {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    align-items: flex-end;
+    margin-top: -80px;
+}
+
+.profileHeader img {
+    height: 120px;
+    background-color: #eaf0ff;
+    border-radius: 50%;
+    border: 2px #eaf0ff solid;
+    padding: 5px;
+}
+
+.profileHeader span {
+    color: black;
+    font-size: 22px;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+.profile-section {
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-section .content {
+    width: 500px;
+    border: 2px solid #00207114;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.profile-section .content .row{
+    padding: 8px;
+    display: flex;
+}
+
+
+.profile-section .label {
+    width: 150px;
+    font-weight: 600;
+    color: #002071;
+}
+
+.profileBkg {
+    background-color: #24394a;
+    height: 220px;
+    width: 100%;
+}
+
+.userTablesContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px
+}
+
+.userTables {
+    width: 500px;
+    border: 2px solid #00207114;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.emptyMessage {
+    text-align: center;
+    padding: 25px;
+    color: rgba(0,0,0,0.5);
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    text-align: left;
+    color: #002071;
+    font-size: 14px;
+}
+
+td {
+    font-size: 13px;
+    padding-top: 7px
+}

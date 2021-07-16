@@ -20,8 +20,8 @@ const Browse = () => {
 
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
-    const [departDate, setDepartDate] = useState(null);
-    const [returnDate, setReturnDate] = useState(null);
+    const [departDate, setDepartDate] = useState("");
+    const [returnDate, setReturnDate] = useState("");
     const [passengersAccount, setPassengersAccount] = useState(1);
     const [isSearchClicked, setIsSearchClicked] = useState(false);
 

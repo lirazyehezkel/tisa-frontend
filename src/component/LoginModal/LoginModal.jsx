@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Modal from "@material-ui/core/Modal";
 import './LoginModal.css';
 
 const LoginModal = ({isOpen, onClose}) => {
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
     return (
         <Modal open={isOpen} onClose={onClose}>
@@ -13,11 +16,11 @@ const LoginModal = ({isOpen, onClose}) => {
                 <div className="login-modal-content">
                     <div style={{width: "100%"}}>
                         <div className="login-input-header">Username</div>
-                        <div className="login-input-container"><input type="text"/></div>
+                        <div className="login-input-container"><input value={username} type="text" onChange={(event) => setUsername(event.target.value)}/></div>
                     </div>
                     <div style={{width: "100%", marginTop: "10%"}}>
                         <div className="login-input-header">Password</div>
-                        <div className="login-input-container"><input type="password"/></div>
+                        <div className="login-input-container"><input value={password} type="password" onChange={(event) => setPassword(event.target.value)}/></div>
                     </div>
                     <div className="login-button-container">
                         <button className="blueButton" style={{width: 200}}>Log In</button>
