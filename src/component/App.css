@@ -18,7 +18,7 @@ body {
 .appHeader {
   display: flex;
   border-bottom: 1px #627cf621 solid;
-  padding: 10px 12%;
+  padding: 10px 2%;
   justify-content: space-between;
   align-items: center;
 }

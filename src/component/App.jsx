@@ -17,7 +17,7 @@ const App = () => {
                         <img className="logo" alt="logo" src={logo}/>
                     </div>
                     <div>
-                        <button className="blueButton" onClick={() => setIsLoginModalOpen(true)}>Sign in</button>
+                        <button className="blueButton" onClick={() => setIsLoginModalOpen(true)}>Sign In</button>
                     </div>
                 </div>
                 <AppSwitchRoutes/>

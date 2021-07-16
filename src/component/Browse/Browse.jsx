@@ -48,8 +48,6 @@ const Browse = () => {
     return (<>
             <div style={sectionStyle}>
                 <div className="browse-content">
-                    <div className="blue-bkg">
-                    </div>
                     <div className="filter-box">
                         <div>
                             <div className="top-filter-box-layout">
