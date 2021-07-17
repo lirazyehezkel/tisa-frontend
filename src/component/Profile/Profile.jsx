@@ -1,13 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import profileIcon from '../../assets/images/user.png';
 import plusIcon from '../../assets/images/plusIcon.svg';
 import './Profile.css';
 import {Button, Tab, Tabs} from "@material-ui/core";
 import {toast} from "react-toastify";
 import validator from 'validator';
+import Api from "../../helpers/api";
 
 const Profile = () => {
 
+    const api = new Api();
     const [selectedTab, setSelectedTab] = useState(0);
     const [newAirline, setNewAirline] = useState("");
     const [newAirlineManager, setNewAirlineManager] = useState("");
@@ -18,18 +20,49 @@ const Profile = () => {
     const flightHistory = [];
     let isAdmin = 1;
     let isAgent = 1;
+    let userAirline= "";
+
+    const getAirplanes = async () => {
+        try {
+            const planes = await api.getAirplanes(userAirline);
+            setAirplanes(planes);
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    const getAirlines = async () => {
+        try {
+            const airlines = await api.getAirlines();
+            setAirlines(airlines);
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    useEffect(() => {
+        getAirplanes()
+        getAirlines()
+    },[])
 
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
 
-    const addAirline = () => {
+    const addAirline = async () => {
         if(newAirline.length === 0)  {toast.error("Airline name is not valid"); return;}
         if(!validator.isEmail(newAirlineManager))  {toast.error("Email is not valid"); return;}
 
-        setAirlines([...airlines, {name: newAirline, airlineManagerEmail: newAirlineManager}]);
-        setNewAirline("");
-        setNewAirlineManager("");
+        try {
+            await api.addAirline(newAirline, newAirlineManager);
+            await getAirlines();
+        } catch (e) {
+            console.error(e);
+            toast.error("Something went wrong, please check the console");
+        }
+        // setAirlines([...airlines, {name: newAirline, airlineManagerEmail: newAirlineManager}]);
+        // setNewAirline("");
+        // setNewAirlineManager("");
     }
 
     const addAirplane = (type) => {
@@ -41,8 +74,15 @@ const Profile = () => {
         setAirplanes(newAirplanes);
     }
 
-    const saveAirplanes = () => {
-        const airplanesForApi = airplanes.filter(airplane => airplane.count);
+    const saveAirplanes = async () => {
+        try {
+            await api.setAirplanes(userAirline, airplanes.filter(airplane => airplane.count));
+            await getAirplanes();
+            toast.success("Saved successfully");
+        } catch(e) {
+            console.error(e);
+            toast.error("Something went wrong, please check the console");
+        }
     }
 
     return (

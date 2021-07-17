@@ -8,6 +8,7 @@ import LoginModal from "./LoginModal/LoginModal";
 import {Routes} from '../constants/routes';
 import {createTheme, MuiThemeProvider} from "@material-ui/core";
 import {ToastContainer, toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const theme = createTheme({
     palette: {
