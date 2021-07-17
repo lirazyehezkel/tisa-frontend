@@ -6,9 +6,10 @@ import logo from '../assets/images/tisa-logo.png';
 import profile from '../assets/images/user.png';
 import LoginModal from "./LoginModal/LoginModal";
 import {Routes} from '../constants/routes';
-import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
+import {createTheme, MuiThemeProvider} from "@material-ui/core";
+import {ToastContainer, toast} from "react-toastify";
 
-const theme = createMuiTheme({
+const theme = createTheme({
     palette: {
         secondary: {
             main: '#E33E7F'
@@ -40,6 +41,7 @@ const App = () => {
                     <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)}/>
                 </div>
             </Router>
+            <ToastContainer style={{zIndex: 2147483004}} position={toast.POSITION.BOTTOM_RIGHT} hideProgressBar={true}/>
         </MuiThemeProvider>
     );
 }

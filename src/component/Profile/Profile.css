@@ -21,10 +21,13 @@
     font-weight: bold;
 }
 
+.user-profile {
+    padding-bottom: 25px
+}
+
 .profile-section {
     padding: 16px;
     border-radius: 8px;
-    margin-top: 30px;
     display: flex;
     justify-content: center;
 }
@@ -72,6 +75,7 @@
     text-align: center;
     padding: 25px;
     color: rgba(0,0,0,0.5);
+    font-size: 16px;
 }
 
 table {
@@ -87,4 +91,25 @@ th {
 td {
     font-size: 13px;
     padding-top: 7px
+}
+
+.profileCubeTitle {
+    padding-bottom: 15px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #002070;
+}
+
+.manageAirlineInput {
+    background: #0020700f;
+    border: 1px #0020707d solid;
+    border-radius: 15px;
+    outline: none;
+    padding: 2px 8px;
+}
+
+.addButton {
+    background: #002070;
+    border-radius: 50%;
+    cursor: pointer;
 }
