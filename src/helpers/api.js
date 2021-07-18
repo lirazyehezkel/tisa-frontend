@@ -27,18 +27,28 @@ export default class Api {
         return this.client;
     };
 
+    login = async (username, password) => {
+        const response = await this.init().post("/Authenticate/Login", {username, password});
+        return response.data;
+    }
+
+    signUp = async (username, password, email) => {
+        const response = await this.init().post("/Authenticate/Register", {username, password, email});
+        return response.data;
+    }
+
     getAirlines = async () => {
         const response = await this.init().get("/Airline/All");
         return response.data;
     };
 
     getAirplanes = async (airlineId) => {
-        const response = await this.init().get(`/Airline/Airplanes/${airlineId}`);
+        const response = await this.init().get(`/Airline/${airlineId}/Airplanes`);
         return response.data;
     }
 
     setAirplanes = async (airlineId, airplanes) => {
-        const response = await this.init().put(`/Airline/Airplanes/${airlineId}`, airplanes);
+        const response = await this.init().put(`/Airline/${airlineId}/Airplanes`, airplanes);
         return response.data;
     }
 

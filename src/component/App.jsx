@@ -34,8 +34,8 @@ const App = () => {
                             <Link to={Routes.BROWSE}><img className="logo" alt="logo" src={logo}/></Link>
                         </div>
                         <div>
-                            {/*<button className="blueButton" onClick={() => setIsLoginModalOpen(true)}>Sign In</button>*/}
-                            <div className="helloUser"><span>Hello, Liraz</span><Link to={Routes.PROFILE}><img className="profileIcon" alt="profile" src={profile}/></Link></div>
+                            <button className="blueButton" onClick={() => setIsLoginModalOpen(true)}>Sign In</button>
+                            {/*<div className="helloUser"><span>Hello, Liraz</span><Link to={Routes.PROFILE}><img className="profileIcon" alt="profile" src={profile}/></Link></div>*/}
                         </div>
                     </div>
                     <AppSwitchRoutes/>

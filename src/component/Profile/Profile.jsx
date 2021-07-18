@@ -20,7 +20,7 @@ const Profile = () => {
     const flightHistory = [];
     let isAdmin = 1;
     let isAgent = 1;
-    let userAirline= "";
+    let userAirline= "1";
 
     const getAirplanes = async () => {
         try {
