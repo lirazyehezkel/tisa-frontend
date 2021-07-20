@@ -4,6 +4,7 @@ import './LoginModal.css';
 import Api from "../../helpers/api";
 import {toast} from "react-toastify";
 import validator from "validator";
+import {useCookies} from "react-cookie";
 
 const SIGN_IN = "Sign In"
 const SIGN_UP = "Sign Up"
@@ -11,6 +12,7 @@ const SIGN_UP = "Sign Up"
 const LoginModal = ({isOpen, onClose}) => {
 
     const api = new Api();
+    const [cookies, setCookie, removeCookie] = useCookies();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -24,6 +26,7 @@ const LoginModal = ({isOpen, onClose}) => {
     const login = async () => {
         try{
             const response = await api.login(username, password);
+            setCookie("tisaAuth", response, {expired: response.tokenExpiration, path: "/"})
             //todo: insert to localstorage
             cleanForm();
             onClose()
@@ -67,11 +70,18 @@ const LoginModal = ({isOpen, onClose}) => {
                 {mode === SIGN_IN && <div className="login-modal-content">
                     <div style={{width: "100%"}}>
                         <div className="login-input-header">Username</div>
-                        <div className="login-input-container"><input value={username} type="text" onChange={(event) => setUsername(event.target.value)}/></div>
+                        <div className="login-input-container">
+                            <input value={username} type="text"
+                                   onChange={(event) => setUsername(event.target.value)}
+                                   onKeyDown={(e) => {if(e.key === 'Enter') login()}}/>
+                        </div>
                     </div>
                     <div style={{width: "100%", marginTop: "10%"}}>
                         <div className="login-input-header">Password</div>
-                        <div className="login-input-container"><input value={password} type="password" onChange={(event) => setPassword(event.target.value)}/></div>
+                        <div className="login-input-container">
+                            <input value={password} type="password" onChange={(event) => setPassword(event.target.value)}
+                                   onKeyDown={(e) => {if(e.key === 'Enter') login()}}/>
+                        </div>
                     </div>
                     <div className="login-button-container">
                         <button className="blueButton" style={{width: 200}} onClick={login}>Log In</button>
@@ -84,15 +94,24 @@ const LoginModal = ({isOpen, onClose}) => {
                 {mode === SIGN_UP && <div className="login-modal-content">
                     <div style={{width: "100%"}}>
                         <div className="login-input-header">Username</div>
-                        <div className="login-input-container"><input value={username} type="text" onChange={(event) => setUsername(event.target.value)}/></div>
+                        <div className="login-input-container">
+                            <input value={username} type="text" onChange={(event) => setUsername(event.target.value)}
+                                   onKeyDown={(e) => {if(e.key === 'Enter') signUp()}}/>
+                        </div>
                     </div>
                     <div style={{width: "100%", marginTop: "10%"}}>
                         <div className="login-input-header">Password</div>
-                        <div className="login-input-container"><input value={password} type="password" onChange={(event) => setPassword(event.target.value)}/></div>
+                        <div className="login-input-container">
+                            <input value={password} type="password" onChange={(event) => setPassword(event.target.value)}
+                                   onKeyDown={(e) => {if(e.key === 'Enter') signUp()}}/>
+                        </div>
                     </div>
                     <div style={{width: "100%", marginTop: "10%"}}>
                         <div className="login-input-header">Email</div>
-                        <div className="login-input-container"><input value={email} type="text" onChange={(event) => setEmail(event.target.value)}/></div>
+                        <div className="login-input-container">
+                            <input value={email} type="text" onChange={(event) => setEmail(event.target.value)}
+                                   onKeyDown={(e) => {if(e.key === 'Enter') signUp()}}/>
+                        </div>
                     </div>
                     <div className="login-button-container">
                         <button className="blueButton" style={{width: 200}} onClick={signUp}>Sign Up</button>

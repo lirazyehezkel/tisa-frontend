@@ -1,14 +1,15 @@
 import * as axios from "axios";
+import Cookies from 'js-cookie';
 
 export default class Api {
     constructor() {
-        // this.api_token = null;
+        this.api_token = null;
         this.client = null;
         this.api_url = "http://localhost:5000/api/";
     }
 
     init = () => {
-        // this.api_token = getCookie("ACCESS_TOKEN");
+        this.api_token = JSON.parse(Cookies.get("tisaAuth"))?.token;
 
         let headers = {
             Accept: "application/json",
@@ -28,16 +29,17 @@ export default class Api {
     };
 
     login = async (username, password) => {
-        const response = await this.init().post("/Authenticate/Login", {username, password});
+        const response = await this.init().post("/Authenticate/SignIn", {username, password});
         return response.data;
     }
 
     signUp = async (username, password, email) => {
-        const response = await this.init().post("/Authenticate/Register", {username, password, email});
+        const response = await this.init().post("/Authenticate/SignUp", {username, password, email});
         return response.data;
     }
 
     getAirlines = async () => {
+        console.log(this.api_token);
         const response = await this.init().get("/Airline/All");
         return response.data;
     };

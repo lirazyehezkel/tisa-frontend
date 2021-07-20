@@ -6,10 +6,19 @@ import {Button, Tab, Tabs} from "@material-ui/core";
 import {toast} from "react-toastify";
 import validator from 'validator';
 import Api from "../../helpers/api";
+import {useCookies} from "react-cookie";
+import {Role} from "../../helpers/consts";
 
 const Profile = () => {
 
     const api = new Api();
+
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const username = cookies?.tisaAuth?.username;
+    const email = cookies?.tisaAuth?.email;
+    const role = cookies?.tisaAuth?.role;
+    const isAdmin = role === Role.Admin;
+
     const [selectedTab, setSelectedTab] = useState(0);
     const [newAirline, setNewAirline] = useState("");
     const [newAirlineManager, setNewAirlineManager] = useState("");
@@ -18,7 +27,6 @@ const Profile = () => {
 
     const upcomingFlights = [{source: "Tel Aviv", destination: "New York", departureTime: new Date()}, {source: "New York", destination: "Tel Aviv", departureTime: new Date(100021)}]
     const flightHistory = [];
-    let isAdmin = 1;
     let isAgent = 1;
     let userAirline= "1";
 
@@ -91,7 +99,7 @@ const Profile = () => {
             <div className="profileBkg"/>
             <div className="profileHeader">
                 <img alt="profileIcon" src={profileIcon}/>
-                <span style={{color: "#002071"}}>Liraz Yehezkel</span>
+                <span style={{color: "#002071"}}>{username}</span>
             </div>
 
             <div className="profileCubes">
@@ -99,10 +107,9 @@ const Profile = () => {
                 <div className="profile-section">
                     <div className="content">
                         <div className="profileCubeTitle">General Account Settings</div>
-                        <div className="row"><div className="label">Username</div> <div className="label-value">722lirazy</div> </div>
-                        <div className="row"><div className="label">Email</div> <div className="label-value">722lirazy@gmail.com</div> </div>
-                        <div className="row"><div className="label">Full Name</div> <div className="label-value">Liraz Yehezkel</div> </div>
-                        <div className="row"><div className="label">Authentication</div> <div className="label-value">Admin</div> </div>
+                        <div className="row"><div className="label">Username</div> <div className="label-value">{username}</div> </div>
+                        <div className="row"><div className="label">Email</div> <div className="label-value">{email}</div> </div>
+                        <div className="row"><div className="label">Authentication</div> <div className="label-value">{role}</div> </div>
                     </div>
                 </div>
 
