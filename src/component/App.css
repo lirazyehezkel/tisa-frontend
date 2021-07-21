@@ -48,7 +48,7 @@ body {
 
 .profileIcon {
   height: 35px;
-  padding: 10px 20px;
+  padding: 12px;
   cursor: pointer;
 }
 
@@ -56,4 +56,5 @@ body {
   display: flex;
   align-items: center;
   color: #002071;
+  margin-right: 25px;
 }

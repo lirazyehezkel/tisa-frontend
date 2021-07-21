@@ -5,6 +5,7 @@ import Api from "../../helpers/api";
 import {toast} from "react-toastify";
 import validator from "validator";
 import {useCookies} from "react-cookie";
+import {tisaCookie} from "../../helpers/consts";
 
 const SIGN_IN = "Sign In"
 const SIGN_UP = "Sign Up"
@@ -26,8 +27,7 @@ const LoginModal = ({isOpen, onClose}) => {
     const login = async () => {
         try{
             const response = await api.login(username, password);
-            setCookie("tisaAuth", response, {expired: response.tokenExpiration, path: "/"})
-            //todo: insert to localstorage
+            setCookie(tisaCookie, response, {expired: response.tokenExpiration, path: "/"})
             cleanForm();
             onClose()
         } catch (e) {

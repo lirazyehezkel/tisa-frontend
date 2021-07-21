@@ -113,3 +113,8 @@ td {
     border-radius: 50%;
     cursor: pointer;
 }
+
+.agentRow {
+    padding: 5px;
+    font-size: 13px;
+}

@@ -10,6 +10,7 @@ import {createTheme, MuiThemeProvider} from "@material-ui/core";
 import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {CookiesProvider, useCookies} from "react-cookie";
+import {tisaCookie} from "../helpers/consts";
 
 const theme = createTheme({
     palette: {
@@ -36,9 +37,10 @@ const App = () => {
                             <div>
                                 <Link to={Routes.BROWSE}><img className="logo" alt="logo" src={logo}/></Link>
                             </div>
-                            <div>
+                            <div style={{display: "flex", alignItems: "center"}}>
                                 {!loggedInUser && <button className="blueButton" onClick={() => setIsLoginModalOpen(true)}>Sign In</button>}
-                                {loggedInUser && <div className="helloUser"><span>Hello, {loggedInUser}</span><Link to={Routes.PROFILE}><img className="profileIcon" alt="profile" src={profile}/></Link></div>}
+                                {loggedInUser && <div className="helloUser"><Link to={Routes.PROFILE}><img className="profileIcon" alt="profile" src={profile}/></Link> <span>Hello, {loggedInUser}</span> </div>}
+                                {loggedInUser && <Link style={{textDecoration: "none"}} to={Routes.BROWSE}><button style={{background: "#f76262", fontSize: 14}} className="blueButton" onClick={() => removeCookie(tisaCookie)}>Sign Out</button></Link>}
                             </div>
                         </div>
                         <AppSwitchRoutes/>

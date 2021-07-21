@@ -1,5 +1,6 @@
 import * as axios from "axios";
 import Cookies from 'js-cookie';
+import {tisaCookie} from "./consts";
 
 export default class Api {
     constructor() {
@@ -9,19 +10,19 @@ export default class Api {
     }
 
     init = () => {
-        this.api_token = JSON.parse(Cookies.get("tisaAuth"))?.token;
+        this.api_token = Cookies.get(tisaCookie) ? JSON.parse(Cookies.get(tisaCookie))?.token : null;
 
         let headers = {
             Accept: "application/json",
         };
 
-        // if (this.api_token) {
-        //     headers.Authorization = `Bearer ${this.api_token}`;
-        // }
+        if (this.api_token) {
+            headers.Authorization = `Bearer ${this.api_token}`;
+        }
 
         this.client = axios.create({
             baseURL: this.api_url,
-            timeout: 31000,
+            timeout: 50000,
             headers: headers,
         });
 
@@ -39,7 +40,6 @@ export default class Api {
     }
 
     getAirlines = async () => {
-        console.log(this.api_token);
         const response = await this.init().get("/Airline/All");
         return response.data;
     };
@@ -56,6 +56,16 @@ export default class Api {
 
     addAirline = async (airlineName, managerEmail) => {
         const response = await this.init().put(`/Airline`, {name: airlineName, airlineManagerEmail: managerEmail});
+        return response.data;
+    }
+
+    addAgent = async (airlineId, email) => {
+        const response = await this.init().put(`/Airline/Agent`, {airlineId: airlineId, email: email});
+        return response.data;
+    }
+
+    getAgents = async (airlineId) => {
+        const response = await this.init().get(`/Airline/${airlineId}/Agents`);
         return response.data;
     }
 }

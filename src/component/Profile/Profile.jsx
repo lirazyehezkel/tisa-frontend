@@ -17,22 +17,25 @@ const Profile = () => {
     const username = cookies?.tisaAuth?.username;
     const email = cookies?.tisaAuth?.email;
     const role = cookies?.tisaAuth?.role;
-    const isAdmin = role === Role.Admin;
+    const airlineId = cookies?.tisaAuth?.airlineId;
+    const airlineName = cookies?.tisaAuth?.airlineName;
+    const isAirlineWorker = role === Role.AirlineAgent || role === Role.AirlineManager;
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [newAirline, setNewAirline] = useState("");
     const [newAirlineManager, setNewAirlineManager] = useState("");
-    const [airlines, setAirlines] = useState([{name: "EL AL", airlineManagerEmail: "722lirazy@gmail.com"}, {name: "American Airlines", airlineManagerEmail: "722zuriely@gmail.com"}]);
-    const [airplanes, setAirplanes] = useState([{type: "boeing 777", count: 2}, {type: "boeing 787", count: 1}, {type: "f16", count: 0}]);
+    const [newAgent, setNewAgent] = useState("");
+
+    const [airlines, setAirlines] = useState([]);
+    const [airplanes, setAirplanes] = useState([]);
+    const [agents, setAgents] = useState([]);
 
     const upcomingFlights = [{source: "Tel Aviv", destination: "New York", departureTime: new Date()}, {source: "New York", destination: "Tel Aviv", departureTime: new Date(100021)}]
     const flightHistory = [];
-    let isAgent = 1;
-    let userAirline= "1";
 
     const getAirplanes = async () => {
         try {
-            const planes = await api.getAirplanes(userAirline);
+            const planes = await api.getAirplanes(airlineId);
             setAirplanes(planes);
         } catch(e) {
             console.error(e)
@@ -48,10 +51,30 @@ const Profile = () => {
         }
     }
 
+    const getAgents = async () => {
+        try {
+            const agents = await api.getAgents(airlineId);
+            setAgents(agents);
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     useEffect(() => {
-        getAirplanes()
-        getAirlines()
-    },[])
+        if(!role) return;
+        switch (role) {
+            case Role.Admin:
+                getAirlines();
+                break;
+            case Role.AirlineManager:
+                getAirplanes(airlineId);
+                getAgents(airlineId);
+                break;
+            case Role.AirlineAgent:
+                getAirplanes(airlineId);
+                break;
+        }
+    },[role])
 
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -64,19 +87,18 @@ const Profile = () => {
         try {
             await api.addAirline(newAirline, newAirlineManager);
             await getAirlines();
+            setNewAirline("");
+            setNewAirlineManager("");
         } catch (e) {
             console.error(e);
             toast.error("Something went wrong, please check the console");
         }
-        // setAirlines([...airlines, {name: newAirline, airlineManagerEmail: newAirlineManager}]);
-        // setNewAirline("");
-        // setNewAirlineManager("");
     }
 
     const addAirplane = (type) => {
         const newAirplanes = airplanes.map(plane => {
-            if(plane.type === type)
-                return {type: type, count: plane.count + 1}
+            if(plane.name === type)
+                return {id: plane.id ,name: type, count: plane.count + 1}
             return plane;
         })
         setAirplanes(newAirplanes);
@@ -84,9 +106,20 @@ const Profile = () => {
 
     const saveAirplanes = async () => {
         try {
-            await api.setAirplanes(userAirline, airplanes.filter(airplane => airplane.count));
+            await api.setAirplanes(airlineId, airplanes.filter(airplane => airplane.count));
             await getAirplanes();
             toast.success("Saved successfully");
+        } catch(e) {
+            console.error(e);
+            toast.error("Something went wrong, please check the console");
+        }
+    }
+
+    const addAgent = async () => {
+        try {
+            await api.addAgent(airlineId, newAgent);
+            await getAgents();
+            setNewAgent("");
         } catch(e) {
             console.error(e);
             toast.error("Something went wrong, please check the console");
@@ -110,6 +143,7 @@ const Profile = () => {
                         <div className="row"><div className="label">Username</div> <div className="label-value">{username}</div> </div>
                         <div className="row"><div className="label">Email</div> <div className="label-value">{email}</div> </div>
                         <div className="row"><div className="label">Authentication</div> <div className="label-value">{role}</div> </div>
+                        {isAirlineWorker && <div className="row"><div className="label">Airline</div> <div className="label-value">{airlineName}</div> </div>}
                     </div>
                 </div>
 
@@ -139,7 +173,7 @@ const Profile = () => {
                     </div>
                 </div>
 
-                {isAdmin && <div className="profile-section">
+                {role === Role.Admin && <div className="profile-section">
                     <div className="content">
                         <div className="profileCubeTitle">Manage Airlines</div>
                         <div>
@@ -166,7 +200,7 @@ const Profile = () => {
                     </div>
                 </div>}
 
-                {isAgent && <div className="profile-section">
+                {(role === Role.AirlineManager || role === Role.AirlineAgent) && <div className="profile-section">
                     <div className="content">
                         <div className="profileCubeTitle">Manage Airplanes</div>
                         <div>
@@ -178,15 +212,28 @@ const Profile = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {airplanes.map(airplane => <tr key={airplane.type}>
-                                    <td>{airplane.type}</td>
-                                    <td style={{display: "flex", alignItems: "center"}}> <span style={{width: 15}}>{airplane.count}</span> <img style={{marginLeft: 10, height: 18}} className="addButton" alt="add" src={plusIcon} onClick={() => addAirplane(airplane.type)}/></td>
+                                {airplanes.map(airplane => <tr key={airplane.id}>
+                                    <td>{airplane.name}</td>
+                                    <td style={{display: "flex", alignItems: "center"}}> <span style={{width: 15}}>{airplane.count}</span> <img style={{marginLeft: 10, height: 18}} className="addButton" alt="add" src={plusIcon} onClick={() => addAirplane(airplane.name)}/></td>
                                 </tr>)}
                                 </tbody>
                             </table>
                             <div style={{display: "flex", justifyContent: "flex-end"}}>
                                 <Button variant={"outlined"} size={"small"} color={"primary"} onClick={saveAirplanes}>SAVE</Button>
                             </div>
+                        </div>
+                    </div>
+                </div>}
+
+                {role === Role.AirlineManager && <div className="profile-section">
+                    <div className="content">
+                        <div className="profileCubeTitle">Manage Agents</div>
+                        <div>
+                                {agents.map(agentEmail => <div className="agentRow" key={agentEmail}>{agentEmail}</div>)}
+                                <div style={{display: "flex", marginTop: 15}}>
+                                    <input className="manageAirlineInput" value={newAgent} onChange={(event) => setNewAgent(event.target.value)} onKeyDown={(e) => {if(e.key === 'Enter') addAgent()}}/>
+                                    <img style={{marginLeft: 15}} className="addButton" alt="add" src={plusIcon} onClick={addAgent}/>
+                                </div>
                         </div>
                     </div>
                 </div>}
