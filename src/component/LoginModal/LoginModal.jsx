@@ -63,8 +63,8 @@ const LoginModal = ({isOpen, onClose}) => {
 
     return (
         <Modal open={isOpen} onClose={onClose}>
-            <div className="login-modal">
-                <div className="login-modal-header">
+            <div className="modal">
+                <div className="modal-header">
                     <div>{mode}</div>
                 </div>
                 {mode === SIGN_IN && <div className="login-modal-content">

@@ -68,4 +68,19 @@ export default class Api {
         const response = await this.init().get(`/Airline/${airlineId}/Agents`);
         return response.data;
     }
+
+    getAirports = async () => {
+        const response = await this.init().get(`/Airport`);
+        return response.data;
+    }
+
+    getAirplaneDepartments = async (airplaneTypeId) => {
+        const response = await this.init().get(`/AirplaneType/${airplaneTypeId}/Departments`);
+        return response.data;
+    }
+
+    createFlight = async (airlineId, flight) => {
+        const response = await this.init().put(`/Flight/${airlineId}`, flight);
+        return response.data;
+    }
 }

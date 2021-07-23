@@ -1,6 +1,6 @@
-.login-modal {
+.modal {
     height: 700px;
-    background: white;
+    background: #eff1ff;
     width: 550px;
     position: absolute;
     left: calc((100% - 550px)/2);
@@ -8,7 +8,7 @@
     outline: 0;
 }
 
-.login-modal-header {
+.modal-header {
     height: 140px;
     text-align: center;
     background: #617cf6;
@@ -40,6 +40,7 @@
     height: 100%;
     width: 100%;
     font-size: 16px;
+    background: transparent;
 }
 
 .login-button-container {

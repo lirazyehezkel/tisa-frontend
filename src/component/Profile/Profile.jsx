@@ -8,6 +8,7 @@ import validator from 'validator';
 import Api from "../../helpers/api";
 import {useCookies} from "react-cookie";
 import {Role} from "../../helpers/consts";
+import NewFlightModal from "../NewFlightModal/NewFlightModal";
 
 const Profile = () => {
 
@@ -20,6 +21,8 @@ const Profile = () => {
     const airlineId = cookies?.tisaAuth?.airlineId;
     const airlineName = cookies?.tisaAuth?.airlineName;
     const isAirlineWorker = role === Role.AirlineAgent || role === Role.AirlineManager;
+
+    const [isNewFlightModalOpen, setIsNewFlightModalOpen] = useState(false);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [newAirline, setNewAirline] = useState("");
@@ -128,7 +131,7 @@ const Profile = () => {
 
     return (
         <div className="user-profile">
-
+            <NewFlightModal isOpen={isNewFlightModalOpen} onClose={() => setIsNewFlightModalOpen(false)} airplanes={airplanes.filter(airplane => airplane.count > 0)} airlineId={airlineId}/>
             <div className="profileBkg"/>
             <div className="profileHeader">
                 <img alt="profileIcon" src={profileIcon}/>
@@ -234,6 +237,18 @@ const Profile = () => {
                                     <input className="manageAirlineInput" value={newAgent} onChange={(event) => setNewAgent(event.target.value)} onKeyDown={(e) => {if(e.key === 'Enter') addAgent()}}/>
                                     <img style={{marginLeft: 15}} className="addButton" alt="add" src={plusIcon} onClick={addAgent}/>
                                 </div>
+                        </div>
+                    </div>
+                </div>}
+
+                {isAirlineWorker && <div className="profile-section">
+                    <div className="content">
+                        <div className="profileCubeTitle">Manage Airline Flights</div>
+                        <div>
+                            <FlightsTable flights={upcomingFlights}/>
+                            <div style={{display: "flex", justifyContent: "flex-end", marginTop: 20}}>
+                                <Button variant={"outlined"} size={"small"} color={"primary"} onClick={() => setIsNewFlightModalOpen(true)}>NEW FLIGHT</Button>
+                            </div>
                         </div>
                     </div>
                 </div>}
