@@ -80,7 +80,18 @@ export default class Api {
     }
 
     createFlight = async (airlineId, flight) => {
-        const response = await this.init().put(`/Flight/${airlineId}`, flight);
+        const response = await this.init().put(`/Flight/Airline/${airlineId}`, flight);
         return response.data;
     }
+
+    getAirlineFlights = async (airlineId) => {
+        const response = await this.init().get(`/Flight/Airline/${airlineId}`);
+        return response.data;
+    }
+
+    getFilteredFlights = async (filter) => {
+        const response = await this.init().post(`/Flight/Filter`, filter);
+        return response.data;
+    }
+
 }

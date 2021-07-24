@@ -20,14 +20,11 @@ const useStyles = makeStyles(() =>
     createStyles({
         formControl: {
             minWidth: 220,
-        },
-        smallFormControl: {
-            minWidth: 50,
         }
     }),
 );
 
-const NewFlightModal = ({isOpen, onClose, airplanes, airlineId}) => {
+const NewFlightModal = ({isOpen, onClose, airplanes, airlineId, getAirlineFlights}) => {
 
     const api = new Api();
     const classes = useStyles();
@@ -95,6 +92,7 @@ const NewFlightModal = ({isOpen, onClose, airplanes, airlineId}) => {
         }
         try {
             await api.createFlight(airlineId, flightObj);
+            await getAirlineFlights();
             onClose();
         } catch(e) {
             console.error(e);

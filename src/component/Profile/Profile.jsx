@@ -32,6 +32,7 @@ const Profile = () => {
     const [airlines, setAirlines] = useState([]);
     const [airplanes, setAirplanes] = useState([]);
     const [agents, setAgents] = useState([]);
+    const [airlineFlights, setAirlineFlights] = useState([]);
 
     const upcomingFlights = [{source: "Tel Aviv", destination: "New York", departureTime: new Date()}, {source: "New York", destination: "Tel Aviv", departureTime: new Date(100021)}]
     const flightHistory = [];
@@ -63,6 +64,15 @@ const Profile = () => {
         }
     }
 
+    const getAirlineFlights = async () => {
+        try {
+            const flights = await api.getAirlineFlights(airlineId);
+            setAirlineFlights(flights.map(flight => {return {source: flight.srcAirport.alphaCode, destination: flight.destAirport.alphaCode, departureTime: flight.departureTime, airplane: flight.airplaneType}}));
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     useEffect(() => {
         if(!role) return;
         switch (role) {
@@ -72,9 +82,11 @@ const Profile = () => {
             case Role.AirlineManager:
                 getAirplanes(airlineId);
                 getAgents(airlineId);
+                getAirlineFlights(airlineId);
                 break;
             case Role.AirlineAgent:
                 getAirplanes(airlineId);
+                getAirlineFlights(airlineId);
                 break;
         }
     },[role])
@@ -131,7 +143,8 @@ const Profile = () => {
 
     return (
         <div className="user-profile">
-            <NewFlightModal isOpen={isNewFlightModalOpen} onClose={() => setIsNewFlightModalOpen(false)} airplanes={airplanes.filter(airplane => airplane.count > 0)} airlineId={airlineId}/>
+            <NewFlightModal isOpen={isNewFlightModalOpen} onClose={() => setIsNewFlightModalOpen(false)}
+                            airplanes={airplanes.filter(airplane => airplane.count > 0)} airlineId={airlineId} getAirlineFlights={getAirlineFlights}/>
             <div className="profileBkg"/>
             <div className="profileHeader">
                 <img alt="profileIcon" src={profileIcon}/>
@@ -245,7 +258,7 @@ const Profile = () => {
                     <div className="content">
                         <div className="profileCubeTitle">Manage Airline Flights</div>
                         <div>
-                            <FlightsTable flights={upcomingFlights}/>
+                            <FlightsTable flights={airlineFlights}/>
                             <div style={{display: "flex", justifyContent: "flex-end", marginTop: 20}}>
                                 <Button variant={"outlined"} size={"small"} color={"primary"} onClick={() => setIsNewFlightModalOpen(true)}>NEW FLIGHT</Button>
                             </div>
@@ -267,13 +280,15 @@ const FlightsTable = ({flights}) => {return <div style={{marginTop: 20}}>
                     <th>Source</th>
                     <th>Destination</th>
                     <th>Departure Time</th>
+                    {flights[0]?.airplane && <th>Airplane</th>}
                 </tr>
             </thead>
             <tbody>
             {flights.map(flight => <tr key={flight.departureTime.toString()}>
                 <td>{flight.source}</td>
                 <td>{flight.destination}</td>
-                <td>{flight.departureTime.toLocaleString()}</td>
+                <td>{new Date(flight.departureTime).toLocaleString()}</td>
+                {flight?.airplane && <td>{flight.airplane}</td>}
             </tr>)}
             </tbody>
         </table>

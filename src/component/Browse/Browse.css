@@ -40,21 +40,16 @@
 }
 
 .top-filter-box-layout-left {
-    width: 75%;
+    width: 100%;
     text-align: left;
 }
 
 .from-filter {
-    padding: 10px;
-    display: flex;
-    align-items: center;
+    padding-bottom: 5px;
 }
 
 .to-filter {
-    padding: 10px;
     border-top: 0.3px #ffffff38 solid;
-    display: flex;
-    align-items: center;
 }
 
 .switch-img {

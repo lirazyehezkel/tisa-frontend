@@ -1,11 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import bkg from '../../assets/images/tisa-bkg.svg';
 import './Browse.css';
-import switchIcon from '../../assets/images/switch.svg';
-import rightArrow from '../../assets/images/right-arrow.svg';
 import plusIcon from '../../assets/images/plusIcon.svg';
 import minusIcon from '../../assets/images/minusIcon.svg';
 import {Link} from 'react-scroll';
+import Api from "../../helpers/api";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {TextField} from "@material-ui/core";
+import arrow from '../../assets/images/right-arrow.svg';
 
 const sectionStyle = {
     width: "100%",
@@ -16,34 +18,63 @@ const sectionStyle = {
 };
 
 
+const todayDate = (d) => {
+    return d.getFullYear() + "-" + "0"+(d.getMonth()+1) + "-" + d.getDate();
+}
+
 const Browse = () => {
 
+    const api = new Api();
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
-    const [departDate, setDepartDate] = useState("");
-    const [returnDate, setReturnDate] = useState("");
-    const [passengersAccount, setPassengersAccount] = useState(1);
+    const [minDepartDate, setMinDepartDate] = useState(todayDate(new Date()));
+    const [maxDepartDate, setMaxDepartDate] = useState("");
+    const [passengersCount, setPassengersCount] = useState(1);
     const [isSearchClicked, setIsSearchClicked] = useState(false);
 
-    const switchFromTo = () => {
-        const from = source;
-        setSource(destination);
-        setDestination(from);
+    const [airports, setAirports] = useState([]);
+    const [filteredFlights, setFilteredFlights] = useState([]);
+
+    const searchFlights = async () => {
+        const filterObj = {
+            srcAirportId: airports.find(airport => airport.name === source)?.id ?? -1,
+            destAirportId: airports.find(airport => airport.name === destination)?.id ?? -1,
+            numberOfPassengers: passengersCount,
+            minDepartureTime: new Date(minDepartDate)
+        }
+        if(maxDepartDate) {
+            filterObj.maxDepartureTime = new Date(maxDepartDate)
+        }
+        const flights = await api.getFilteredFlights(filterObj);
+        setFilteredFlights(flights)
+        console.log(flights)
     }
 
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await api.getAirports();
+                setAirports(response.map(airport => {return {id: airport.id, name: `${airport.country} (${airport.alphaCode})`}}))
+            } catch (e) {
+                console.error(e);
+            }
+        })()
+    },[])
+
     const minusPassenger = () => {
-        if (passengersAccount > 1)
-            setPassengersAccount(passengersAccount - 1);
+        if (passengersCount > 1)
+            setPassengersCount(passengersCount - 1);
     }
 
     const plusPassenger = () => {
-        if (passengersAccount < 8)
-            setPassengersAccount(passengersAccount + 1);
+        if (passengersCount < 8)
+            setPassengersCount(passengersCount + 1);
     }
 
-    const search = () => {
-        setIsSearchClicked(true);
-    }
+    // const search = () => {
+    //
+    //     setIsSearchClicked(true);
+    // }
 
     return (<>
             <div style={sectionStyle}>
@@ -53,29 +84,36 @@ const Browse = () => {
                             <div className="top-filter-box-layout">
                                 <div className="top-filter-box-layout-left">
                                     <div className="from-filter">
-                                        <div style={{fontSize: 20, width: 80}}>From</div>
-                                        <input style={{marginLeft: 15, width: "100%"}} className="date-input"
-                                               value={source} onChange={(event) => setSource(event.target.value)}/>
+                                        <Autocomplete
+                                            id="choose-airport-from"
+                                            options={airports?.map((option) => option.name)}
+                                            onSelect={(event) => setSource(event.target.value)}
+                                            renderInput={(params) => (
+                                                <TextField {...params} label="From" margin="normal" variant="outlined"/>
+                                            )}
+                                        />
                                     </div>
                                     <div className="to-filter">
-                                        <div style={{fontSize: 20, width: 80}}>To</div>
-                                        <input style={{marginLeft: 15, width: "100%"}} className="date-input"
-                                               value={destination}
-                                               onChange={(event) => setDestination(event.target.value)}/>
+                                        <Autocomplete
+                                            id="choose-airport-to"
+                                            options={airports?.map((option) => option.name)}
+                                            onSelect={(event) => setDestination(event.target.value)}
+                                            renderInput={(params) => (
+                                                <TextField {...params} label="To" margin="normal" variant="outlined"/>
+                                            )}
+                                        />
                                     </div>
-                                </div>
-                                <div>
-                                    <img className="switch-img" alt="switch" src={switchIcon} onClick={switchFromTo}/>
                                 </div>
                             </div>
                             <div>
-                                <div className="boarding-date-title">Boarding Date</div>
+                                <div className="boarding-date-title">Range of Boarding Date</div>
                                 <div className="boarding-date-box">
-                                    <input className="date-input" type="date" value={departDate}
-                                           onChange={(event) => setDepartDate(event.target.value)}/>
-                                    <img style={{height: "12px"}} alt="arrow" src={rightArrow}/>
-                                    <input className="date-input" type="date" value={returnDate}
-                                           onChange={(event) => setReturnDate(event.target.value)}/>
+                                    <input className="date-input" type="date" value={minDepartDate}
+                                           onChange={(event) => setMinDepartDate(event.target.value)}/>
+                                    {/*<img style={{height: "12px"}} alt="arrow" src={rightArrow}/>*/}
+                                    <span> ... </span>
+                                    <input className="date-input" type="date" value={maxDepartDate}
+                                           onChange={(event) => setMaxDepartDate(event.target.value)}/>
                                 </div>
                             </div>
                             <div style={{marginTop: 30}}>
@@ -83,19 +121,27 @@ const Browse = () => {
                                 <div className="passengers">
                                     <div><img src={minusIcon} alt={"minus"} onClick={minusPassenger}/></div>
                                     <div className="passengersAccount"><span
-                                        className="passengersAccountNumber">{passengersAccount}</span>adult{passengersAccount > 1 && "s"}
+                                        className="passengersAccountNumber">{passengersCount}</span>adult{passengersCount > 1 && "s"}
                                     </div>
                                     <div><img src={plusIcon} alt={"plus"} onClick={plusPassenger}/></div>
                                 </div>
                             </div>
                         </div>
                         <div className="searchContainer">
-                            <Link to="searchResults" smooth={true}><button className="blueButton searchButton" onClick={search}>Search</button></Link>
+                            <Link to="searchResults" smooth={true}><button className="blueButton searchButton" onClick={searchFlights}>Search</button></Link>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="searchResults"  style={{height: isSearchClicked && "100vh"}}>
+            <div id="searchResults" style={{height: filteredFlights?.length > 0 && "70vh"}}>
+                {filteredFlights.map(flight => <div>
+                    <div style={{display: "flex"}}>
+                        <div>{flight.srcAirport.alphaCode}</div>
+                        <div><img alt={"arrow"} src={arrow}/></div>
+                        <div>{flight.destAirport.alphaCode}</div>
+                    </div>
+                    <div>{new Date(flight.departureTime).toLocaleString()}</div>
+                </div>)}
             </div>
         </>
     );
