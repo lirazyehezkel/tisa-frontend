@@ -8,6 +8,7 @@ import Api from "../../helpers/api";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {TextField} from "@material-ui/core";
 import arrow from '../../assets/images/right-arrow.svg';
+import * as dateFormat from 'dateformat';
 
 const sectionStyle = {
     width: "100%",
@@ -71,10 +72,10 @@ const Browse = () => {
             setPassengersCount(passengersCount + 1);
     }
 
-    // const search = () => {
-    //
-    //     setIsSearchClicked(true);
-    // }
+    const selectFlight = () => {
+
+    }
+
 
     return (<>
             <div style={sectionStyle}>
@@ -134,14 +135,35 @@ const Browse = () => {
                 </div>
             </div>
             <div id="searchResults" style={{height: filteredFlights?.length > 0 && "70vh"}}>
-                {filteredFlights.map(flight => <div>
-                    <div style={{display: "flex"}}>
-                        <div>{flight.srcAirport.alphaCode}</div>
-                        <div><img alt={"arrow"} src={arrow}/></div>
-                        <div>{flight.destAirport.alphaCode}</div>
-                    </div>
-                    <div>{new Date(flight.departureTime).toLocaleString()}</div>
-                </div>)}
+                <div className="flightsContainer">
+                    {filteredFlights.map(flight => <div className="flightCube">
+                        <div className={"flightCubeLayout"}>
+                            <div className="flightCubeLeft">
+                                <div style={{padding: 17}}>
+                                    {dateFormat(flight.departureTime, 'mmmm dd')}
+                                </div>
+                                <div style={{display: "flex"}}>
+                                    <div className="sourceAirport">
+                                        <div>{flight.srcAirport.alphaCode}</div>
+                                        <div style={{marginTop: 5}}>{dateFormat(flight.departureTime, 'HH:mm')}</div>
+                                    </div>
+                                    <div className="flightLineContainer" style={{display: "flex"}}>
+                                        <div className="flightLine"/>
+                                        <div><img className="arrowImg" alt={"arrow"} src={arrow}/></div>
+                                    </div>
+                                    <div className="destAirport">
+                                        <div>{flight.destAirport.alphaCode}</div>
+                                        {/*<div>{flight.destAirport.country}</div>*/}
+                                        <div style={{marginTop: 5}}>{dateFormat(flight.arrivalTime, 'HH:mm')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flightCubeRight">
+                                <button className="blueButton" onClick={selectFlight}>Select</button>
+                            </div>
+                        </div>
+                    </div>)}
+                </div>
             </div>
         </>
     );

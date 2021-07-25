@@ -114,3 +114,72 @@
     margin-right: 5px;
     font-size: 21px;
 }
+
+.flightCube {
+    width: 25%;
+    height: 150px;
+    margin: 3%;
+    min-width: 300px;
+    padding: 1%;
+    display: inherit;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 6px -4px #24394a;
+    text-align: center;
+    border-radius: 10px;
+    color: #24394a;
+}
+
+.flightsContainer {
+    display: inline-block;
+    text-align: left;
+    width: 100%;
+}
+
+.flightCubeLayout {
+    height: 100%;
+    display: flex;
+    width: 100%;
+}
+
+.flightCubeLeft {
+    width: calc(100% - 100px);
+    border-right: 2px #24394a38 solid;
+    margin-right: 20px;
+}
+
+.flightCubeRight {
+    width: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.flightLine {
+    position: relative;
+    display: block;
+    width: 90%;
+    height: .125rem;
+    margin: .375rem auto;
+    padding: 0;
+    border-radius: .375rem;
+    background-color: #24394a;
+    line-height: 0;
+    text-align: center;
+}
+
+.arrowImg {
+    height: 11.7px;
+    margin-left: -2px;
+}
+
+.destAirport {
+    width: 33%
+}
+.sourceAirport {
+    width: 33%
+}
+
+.flightLineContainer {
+    display: flex;
+    align-items: center;
+    width: 33%;
+}
