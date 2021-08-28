@@ -94,4 +94,18 @@ export default class Api {
         return response.data;
     }
 
+    getHistoryFlights = async () => {
+        const response = await this.init().get(`/Flight/User/History`);
+        return response.data;
+    }
+
+    getUpcomingFlights = async () => {
+        const response = await this.init().get(`/Flight/User/Future`);
+        return response.data;
+    }
+
+    getFlightDetails = async (flightId) => {
+        const response = await this.init().get(`/Flight/${flightId}`);
+        return response.data;
+    }
 }

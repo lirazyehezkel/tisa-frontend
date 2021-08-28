@@ -28,14 +28,13 @@ const Profile = () => {
     const [newAirline, setNewAirline] = useState("");
     const [newAirlineManager, setNewAirlineManager] = useState("");
     const [newAgent, setNewAgent] = useState("");
+    const [airlineFlights, setAirlineFlights] = useState([]);
 
     const [airlines, setAirlines] = useState([]);
     const [airplanes, setAirplanes] = useState([]);
     const [agents, setAgents] = useState([]);
-    const [airlineFlights, setAirlineFlights] = useState([]);
-
-    const upcomingFlights = [{source: "Tel Aviv", destination: "New York", departureTime: new Date()}, {source: "New York", destination: "Tel Aviv", departureTime: new Date(100021)}]
-    const flightHistory = [];
+    const [upcomingFlights, setUpcomingFlights] = useState([]);
+    const [historyFlights, setHistoryFlights] = useState([]);
 
     const getAirplanes = async () => {
         try {
@@ -73,8 +72,20 @@ const Profile = () => {
         }
     }
 
+    const getUserFlights = async () => {
+        try {
+            const historyFlights = await api.getHistoryFlights();
+            const upcomingFlights = await api.getUpcomingFlights();
+            setHistoryFlights(historyFlights.map(flight => {return {source: flight.srcAirport.alphaCode, destination: flight.destAirport.alphaCode, departureTime: flight.departureTime}}));
+            setUpcomingFlights(upcomingFlights.map(flight => {return {source: flight.srcAirport.alphaCode, destination: flight.destAirport.alphaCode, departureTime: flight.departureTime}}));
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     useEffect(() => {
         if(!role) return;
+        getUserFlights();
         switch (role) {
             case Role.Admin:
                 getAirlines();
@@ -182,9 +193,9 @@ const Profile = () => {
                             </div> : <FlightsTable flights={upcomingFlights}/>}
                         </div>}
                         {selectedTab === 1 && <div>
-                            {flightHistory?.length === 0 ? <div className="emptyMessage">
+                            {historyFlights?.length === 0 ? <div className="emptyMessage">
                             You don't have any previous flights
-                        </div> : <FlightsTable flights={flightHistory}/>}
+                        </div> : <FlightsTable flights={historyFlights}/>}
                         </div>}
                     </div>
                 </div>

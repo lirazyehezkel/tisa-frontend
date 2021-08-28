@@ -183,3 +183,10 @@
     align-items: center;
     width: 33%;
 }
+
+.noResult {
+    text-align: center;
+    padding: 50px;
+    color: rgba(0,0,0,0.5);
+    font-size: 20px;
+}

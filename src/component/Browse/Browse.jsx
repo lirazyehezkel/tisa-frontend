@@ -9,6 +9,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import {TextField} from "@material-ui/core";
 import arrow from '../../assets/images/right-arrow.svg';
 import * as dateFormat from 'dateformat';
+import spinner from '../../assets/images/spinner.svg';
 
 const sectionStyle = {
     width: "100%",
@@ -31,10 +32,10 @@ const Browse = () => {
     const [minDepartDate, setMinDepartDate] = useState(todayDate(new Date()));
     const [maxDepartDate, setMaxDepartDate] = useState("");
     const [passengersCount, setPassengersCount] = useState(1);
-    const [isSearchClicked, setIsSearchClicked] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [airports, setAirports] = useState([]);
-    const [filteredFlights, setFilteredFlights] = useState([]);
+    const [filteredFlights, setFilteredFlights] = useState(null);
 
     const searchFlights = async () => {
         const filterObj = {
@@ -46,9 +47,15 @@ const Browse = () => {
         if(maxDepartDate) {
             filterObj.maxDepartureTime = new Date(maxDepartDate)
         }
-        const flights = await api.getFilteredFlights(filterObj);
-        setFilteredFlights(flights)
-        console.log(flights)
+        try {
+            setIsLoading(true);
+            const flights = await api.getFilteredFlights(filterObj);
+            setFilteredFlights(flights)
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -72,9 +79,14 @@ const Browse = () => {
             setPassengersCount(passengersCount + 1);
     }
 
-    const selectFlight = () => {
-
+    const selectFlight = async (flightId) => {
+        try {
+            const flightDetails = await api.getFlightDetails(flightId);
+        } catch (e) {
+            console.error(e);
+        }
     }
+
 
 
     return (<>
@@ -136,33 +148,36 @@ const Browse = () => {
             </div>
             <div id="searchResults" style={{height: filteredFlights?.length > 0 && "70vh"}}>
                 <div className="flightsContainer">
-                    {filteredFlights.map(flight => <div className="flightCube">
-                        <div className={"flightCubeLayout"}>
-                            <div className="flightCubeLeft">
-                                <div style={{padding: 17}}>
-                                    {dateFormat(flight.departureTime, 'mmmm dd')}
+                    {isLoading ? <div style={{textAlign: "center", padding: 20}}><img style={{height: 40}} src={spinner} alt="spinner"/></div> : <>
+                        {filteredFlights?.length === 0 && <div className="noResult">No Result match your search criteria</div>}
+                        {filteredFlights?.map(flight => <div className="flightCube">
+                            <div className={"flightCubeLayout"}>
+                                <div className="flightCubeLeft">
+                                    <div style={{padding: 17}}>
+                                        {dateFormat(flight.departureTime, 'mmmm dd')}
+                                    </div>
+                                    <div style={{display: "flex"}}>
+                                        <div className="sourceAirport">
+                                            <div>{flight.srcAirport.alphaCode}</div>
+                                            <div style={{marginTop: 5}}>{dateFormat(flight.departureTime, 'HH:mm')}</div>
+                                        </div>
+                                        <div className="flightLineContainer" style={{display: "flex"}}>
+                                            <div className="flightLine"/>
+                                            <div><img className="arrowImg" alt={"arrow"} src={arrow}/></div>
+                                        </div>
+                                        <div className="destAirport">
+                                            <div>{flight.destAirport.alphaCode}</div>
+                                            {/*<div>{flight.destAirport.country}</div>*/}
+                                            <div style={{marginTop: 5}}>{dateFormat(flight.arrivalTime, 'HH:mm')}</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div style={{display: "flex"}}>
-                                    <div className="sourceAirport">
-                                        <div>{flight.srcAirport.alphaCode}</div>
-                                        <div style={{marginTop: 5}}>{dateFormat(flight.departureTime, 'HH:mm')}</div>
-                                    </div>
-                                    <div className="flightLineContainer" style={{display: "flex"}}>
-                                        <div className="flightLine"/>
-                                        <div><img className="arrowImg" alt={"arrow"} src={arrow}/></div>
-                                    </div>
-                                    <div className="destAirport">
-                                        <div>{flight.destAirport.alphaCode}</div>
-                                        {/*<div>{flight.destAirport.country}</div>*/}
-                                        <div style={{marginTop: 5}}>{dateFormat(flight.arrivalTime, 'HH:mm')}</div>
-                                    </div>
+                                <div className="flightCubeRight">
+                                    <button className="blueButton" onClick={() => selectFlight(flight.flightId)}>Select</button>
                                 </div>
                             </div>
-                            <div className="flightCubeRight">
-                                <button className="blueButton" onClick={selectFlight}>Select</button>
-                            </div>
-                        </div>
-                    </div>)}
+                        </div>)}
+                    </>}
                 </div>
             </div>
         </>
