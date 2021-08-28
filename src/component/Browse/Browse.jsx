@@ -10,6 +10,8 @@ import {TextField} from "@material-ui/core";
 import arrow from '../../assets/images/right-arrow.svg';
 import * as dateFormat from 'dateformat';
 import spinner from '../../assets/images/spinner.svg';
+import OrderFlightModal from "../OrderFlightModal/OrderFlightModal";
+import {formatInputRangeDate} from "../../helpers/helpers";
 
 const sectionStyle = {
     width: "100%",
@@ -33,6 +35,8 @@ const Browse = () => {
     const [maxDepartDate, setMaxDepartDate] = useState("");
     const [passengersCount, setPassengersCount] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [isOrderFlightModalOpen, setIsOrderFlightModalOpen] = useState(false);
+    const [selectedFlightId, setSelectedFlightId] = useState(null);
 
     const [airports, setAirports] = useState([]);
     const [filteredFlights, setFilteredFlights] = useState(null);
@@ -80,16 +84,12 @@ const Browse = () => {
     }
 
     const selectFlight = async (flightId) => {
-        try {
-            const flightDetails = await api.getFlightDetails(flightId);
-        } catch (e) {
-            console.error(e);
-        }
+        setSelectedFlightId(flightId);
+        setIsOrderFlightModalOpen(true);
     }
 
-
-
     return (<>
+            <OrderFlightModal isOpen={isOrderFlightModalOpen} onClose={() => setIsOrderFlightModalOpen(false)} flightId={selectedFlightId}/>
             <div style={sectionStyle}>
                 <div className="browse-content">
                     <div className="filter-box">
@@ -121,11 +121,10 @@ const Browse = () => {
                             <div>
                                 <div className="boarding-date-title">Range of Boarding Date</div>
                                 <div className="boarding-date-box">
-                                    <input className="date-input" type="date" value={minDepartDate}
+                                    <input min={formatInputRangeDate(new Date())} className="date-input" type="date" value={minDepartDate}
                                            onChange={(event) => setMinDepartDate(event.target.value)}/>
-                                    {/*<img style={{height: "12px"}} alt="arrow" src={rightArrow}/>*/}
                                     <span> ... </span>
-                                    <input className="date-input" type="date" value={maxDepartDate}
+                                    <input min={formatInputRangeDate(minDepartDate)} className="date-input" type="date" value={maxDepartDate}
                                            onChange={(event) => setMaxDepartDate(event.target.value)}/>
                                 </div>
                             </div>
@@ -153,24 +152,7 @@ const Browse = () => {
                         {filteredFlights?.map(flight => <div className="flightCube">
                             <div className={"flightCubeLayout"}>
                                 <div className="flightCubeLeft">
-                                    <div style={{padding: 17}}>
-                                        {dateFormat(flight.departureTime, 'mmmm dd')}
-                                    </div>
-                                    <div style={{display: "flex"}}>
-                                        <div className="sourceAirport">
-                                            <div>{flight.srcAirport.alphaCode}</div>
-                                            <div style={{marginTop: 5}}>{dateFormat(flight.departureTime, 'HH:mm')}</div>
-                                        </div>
-                                        <div className="flightLineContainer" style={{display: "flex"}}>
-                                            <div className="flightLine"/>
-                                            <div><img className="arrowImg" alt={"arrow"} src={arrow}/></div>
-                                        </div>
-                                        <div className="destAirport">
-                                            <div>{flight.destAirport.alphaCode}</div>
-                                            {/*<div>{flight.destAirport.country}</div>*/}
-                                            <div style={{marginTop: 5}}>{dateFormat(flight.arrivalTime, 'HH:mm')}</div>
-                                        </div>
-                                    </div>
+                                    <FlightDisplay flight={flight}/>
                                 </div>
                                 <div className="flightCubeRight">
                                     <button className="blueButton" onClick={() => selectFlight(flight.flightId)}>Select</button>
@@ -185,3 +167,23 @@ const Browse = () => {
 }
 
 export default Browse;
+
+export const FlightDisplay = ({flight}) => <div style={{width: "100%"}}>
+    <div style={{padding: 17}}>
+        {dateFormat(flight.departureTime, 'mmmm dd')}
+    </div>
+    <div style={{display: "flex"}}>
+        <div className="sourceAirport">
+            <div>{flight.srcAirport.alphaCode}</div>
+            <div style={{marginTop: 5}}>{dateFormat(flight.departureTime, 'HH:MM')}</div>
+        </div>
+        <div className="flightLineContainer" style={{display: "flex"}}>
+            <div className="flightLine"/>
+            <div><img className="arrowImg" alt={"arrow"} src={arrow}/></div>
+        </div>
+        <div className="destAirport">
+            <div>{flight.destAirport.alphaCode}</div>
+            <div style={{marginTop: 5}}>{dateFormat(flight.arrivalTime, 'HH:MM')}</div>
+        </div>
+    </div>
+</div>

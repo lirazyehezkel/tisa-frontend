@@ -116,7 +116,7 @@ const NewFlightModal = ({isOpen, onClose, airplanes, airlineId, getAirlineFlight
                 <div className="modal-header">
                     <div>New Flight</div>
                 </div>
-                <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", height: "calc(100% - 160px)"}}>
+                <div className="modal-content">
                     <div>
                         <div style={{display: "flex", marginTop: 20}}>
                            <div style={{padding: 20}}>

@@ -1,5 +1,5 @@
 .modal {
-    height: 700px;
+    min-height: 700px;
     background: #eff1ff;
     width: 550px;
     position: absolute;
@@ -17,6 +17,14 @@
     align-items: center;
     font-size: 32px;
     color: white
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 160px);
+    min-height: 540px;
 }
 
 .login-modal-content {
