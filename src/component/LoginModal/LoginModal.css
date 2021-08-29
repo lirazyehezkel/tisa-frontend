@@ -6,6 +6,7 @@
     left: calc((100% - 550px)/2);
     top: calc((100% - 700px)/2);
     outline: 0;
+    border-radius: 4px;
 }
 
 .modal-header {

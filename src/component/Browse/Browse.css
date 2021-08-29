@@ -129,6 +129,19 @@
     color: #24394a;
 }
 
+.airlineName {
+    border-bottom: 1px #0000001c solid;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.airlineName:hover {
+    color: #627ef7;
+}
+
 .flightsContainer {
     display: inline-block;
     text-align: left;
@@ -143,7 +156,6 @@
 
 .flightCubeLeft {
     width: calc(100% - 100px);
-    border-right: 2px #24394a38 solid;
     margin-right: 20px;
 }
 

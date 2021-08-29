@@ -8,6 +8,7 @@ import Api from "../../helpers/api";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {TextField} from "@material-ui/core";
 import arrow from '../../assets/images/right-arrow.svg';
+import airplane from '../../assets/images/airplane.png';
 import * as dateFormat from 'dateformat';
 import spinner from '../../assets/images/spinner.svg';
 import OrderFlightModal from "../OrderFlightModal/OrderFlightModal";
@@ -150,6 +151,10 @@ const Browse = () => {
                     {isLoading ? <div style={{textAlign: "center", padding: 20}}><img style={{height: 40}} src={spinner} alt="spinner"/></div> : <>
                         {filteredFlights?.length === 0 && <div className="noResult">No Result match your search criteria</div>}
                         {filteredFlights?.map(flight => <div className="flightCube">
+                            <div className="airlineName">
+                                <img style={{height: 18, marginRight: 5}} alt="airplane" src={airplane}/>
+                                {flight.airlineName}
+                            </div>
                             <div className={"flightCubeLayout"}>
                                 <div className="flightCubeLeft">
                                     <FlightDisplay flight={flight}/>

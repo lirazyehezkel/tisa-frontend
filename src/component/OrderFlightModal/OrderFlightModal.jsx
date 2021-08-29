@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import Modal from "@material-ui/core/Modal";
 import '../LoginModal/LoginModal.css';
 import './OrderFlightModal.css';
+import '../Browse/Browse.css';
 import spinner from "../../assets/images/spinner.svg";
 import {FlightDisplay} from "../Browse/Browse";
 import {Button, Radio} from "@material-ui/core";
@@ -10,6 +11,7 @@ import minusIcon from "../../assets/images/minusIconDark.svg";
 import plusIcon from "../../assets/images/plusIconDark.svg";
 import * as dateFormat from "dateformat";
 import {toast} from "react-toastify";
+import airplane from "../../assets/images/airplane.png";
 
 const OrderFlightModal = ({isOpen, onClose, flightId}) => {
 
@@ -70,7 +72,11 @@ const OrderFlightModal = ({isOpen, onClose, flightId}) => {
         <Modal open={isOpen} onClose={onClose}>
             <div className="modal">
                 {!flightDetails ? <div style={{textAlign: "center", padding: 20}}><img style={{height: 40}} src={spinner} alt="spinner"/></div> : <>
-                <div className="modal-header" style={{fontSize: 16}}>
+                <div className="modal-header" style={{fontSize: 16, display: "block"}}>
+                    <div className="airlineName" style={{justifyContent: "flex-start", backgroundColor: "#002070", padding: 10, boxShadow: "0px 4px 6px -4px white", borderBottom: "none"}}>
+                        <img style={{height: 18, marginRight: 10}} alt="airplane" src={airplane}/>
+                        {flightDetails.airlineName}
+                    </div>
                     <FlightDisplay flight={flightDetails}/>
                 </div>
                 {isOrderDone ? <div style={{padding: "20%"}}>
