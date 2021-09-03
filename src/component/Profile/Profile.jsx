@@ -9,6 +9,8 @@ import Api from "../../helpers/api";
 import {useCookies} from "react-cookie";
 import {Role} from "../../helpers/consts";
 import NewFlightModal from "../NewFlightModal/NewFlightModal";
+import download from '../../assets/images/downloadFile.svg';
+import {exportToCSV} from "../../helpers/helpers";
 
 const Profile = () => {
 
@@ -152,6 +154,26 @@ const Profile = () => {
         }
     }
 
+    const downloadAirlineReport = async () => {
+        try {
+            const response = await api.getAirlineReport(airlineId);
+            const fileName = `TISA - Flights Report - ${response.airlineName}`;
+            exportToCSV(response.flightsData, fileName);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const downloadAdminReport = async () => {
+        try {
+            const response = await api.getAdminReport();
+            const fileName = "TISA - General Report";
+            // exportToCSV(response.flightsData, fileName);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     return (
         <div className="user-profile">
             <NewFlightModal isOpen={isNewFlightModalOpen} onClose={() => setIsNewFlightModalOpen(false)}
@@ -163,7 +185,12 @@ const Profile = () => {
             </div>
 
             <div className="profileCubes">
-
+                {(role === Role.AirlineManager || role === Role.Admin) && <div className="profile-section">
+                    <div className="content" style={{border: "none", padding: 0, marginRight: 40}}>
+                        {role === Role.AirlineManager && <Button endIcon={<img alt={"download"} src={download}/>} variant={"outlined"} size={"small"} color={"primary"} onClick={downloadAirlineReport}>Flights Report</Button>}
+                        {role === Role.Admin && <Button endIcon={<img alt={"download"} src={download}/>} variant={"outlined"} size={"small"} color={"primary"} onClick={downloadAdminReport}>General Report</Button>}
+                    </div>
+                </div>}
                 <div className="profile-section">
                     <div className="content">
                         <div className="profileCubeTitle">General Account Settings</div>

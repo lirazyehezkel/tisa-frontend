@@ -113,4 +113,24 @@ export default class Api {
         const response = await this.init().put(`/Flight/Order`, {flightId, departmentId, seatsQuantity});
         return response.data;
     }
+
+    getAirlineReviews = async (airlineId) => {
+        const response = await this.init().get(`/Review/Airline/${airlineId}`);
+        return response.data;
+    }
+
+    writeReview = async (airlineId, username, content, ranking, reviewDate) => {
+        const response = await this.init().put(`/Review`, {airlineId, username, content, ranking, reviewDate});
+        return response.data;
+    }
+
+    getAirlineReport = async (airlineId) => {
+        const response = await this.init().get(`/Report/Airline/${airlineId}`);
+        return response.data;
+    }
+
+    getAdminReport = async () => {
+        const response = await this.init().get(`/Report`);
+        return response.data;
+    }
 }

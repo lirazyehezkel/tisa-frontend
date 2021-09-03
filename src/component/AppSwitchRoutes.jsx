@@ -4,6 +4,7 @@ import {Routes} from '../constants/routes';
 import {Redirect} from "react-router";
 import Browse from "./Browse/Browse";
 import Profile from "./Profile/Profile";
+import AirlineReviews from "./AirlineReviews/AirlineReviews";
 
 const AppSwitchRoutes = () => {
     return <Switch>
@@ -13,23 +14,11 @@ const AppSwitchRoutes = () => {
         <Route exact path={Routes.BROWSE}>
             <Browse/>
         </Route>
-        <Route path={Routes.FLIGHT_DETAILS}>
-            <div>
-                flight details
-            </div>
-        </Route>
         <Route path={Routes.PROFILE}>
             <Profile/>
         </Route>
         <Route path={Routes.AIRLINE}>
-            <div>
-                airline
-            </div>
-        </Route>
-        <Route path={Routes.SETTINGS}>
-            <div>
-                settings
-            </div>
+            <AirlineReviews/>
         </Route>
     </Switch>
 }

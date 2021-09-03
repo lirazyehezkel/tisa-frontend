@@ -13,6 +13,7 @@ import * as dateFormat from 'dateformat';
 import spinner from '../../assets/images/spinner.svg';
 import OrderFlightModal from "../OrderFlightModal/OrderFlightModal";
 import {formatInputRangeDate} from "../../helpers/helpers";
+import {Routes} from "../../constants/routes";
 
 const sectionStyle = {
     width: "100%",
@@ -151,7 +152,7 @@ const Browse = () => {
                     {isLoading ? <div style={{textAlign: "center", padding: 20}}><img style={{height: 40}} src={spinner} alt="spinner"/></div> : <>
                         {filteredFlights?.length === 0 && <div className="noResult">No Result match your search criteria</div>}
                         {filteredFlights?.map(flight => <div className="flightCube">
-                            <div className="airlineName">
+                            <div className="airlineName" onClick={() => window.open(Routes.AIRLINE.replace(":airlineId", flight.airlineId))}>
                                 <img style={{height: 18, marginRight: 5}} alt="airplane" src={airplane}/>
                                 {flight.airlineName}
                             </div>
