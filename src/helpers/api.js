@@ -124,13 +124,23 @@ export default class Api {
         return response.data;
     }
 
-    getAirlineReport = async (airlineId) => {
+    getAirlineFlightsReport = async (airlineId) => {
         const response = await this.init().get(`/Report/Airline/${airlineId}`);
         return response.data;
     }
 
-    getAdminReport = async () => {
-        const response = await this.init().get(`/Report`);
+    getAirlineOrdersReport = async (airlineId) => {
+        const response = await this.init().get(`/Report/Airline/Orders/${airlineId}`);
+        return response.data;
+    }
+
+    getAdminAirlinesReport = async () => {
+        const response = await this.init().get(`/Report/Admin/Airlines`);
+        return response.data;
+    }
+
+    getAdminUsersReport = async () => {
+        const response = await this.init().get(`/Report/Admin/Users`);
         return response.data;
     }
 }

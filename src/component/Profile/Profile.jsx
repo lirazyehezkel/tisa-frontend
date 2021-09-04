@@ -154,16 +154,17 @@ const Profile = () => {
         }
     }
 
-    const downloadAirlineReport = async () => {
+    const downloadFlightsReport = async () => {
         try {
-            const response = await api.getAirlineReport(airlineId);
-            const fileName = `TISA - Flights Report - ${response.airlineName}`;
-            response.flightsData.push({flightId: "SUMMARY", totalOfIncome: response.totalOfIncome, occupancyPercentage: response.averageOccupancyPercentage});
-            const csvData = response.flightsData.map(flight => {
+            const response = await api.getAirlineFlightsReport(airlineId);
+            const fileName = `TISA - Flights Report - ${airlineName}`;
+
+            response.flightsData?.push({flightId: "SUMMARY", totalOfIncome: response.totalOfIncome, occupancyPercentage: response.averageOccupancyPercentage});
+            const csvData = response.flightsData?.map(flight => {
                 flight.totalOfIncome += "$";
                 flight.occupancyPercentage += "%"
                 return flight
-            })
+            }) ?? [];
             exportToCSV(csvData, fileName);
         } catch (e) {
             console.error(e);
@@ -172,14 +173,34 @@ const Profile = () => {
 
     const downloadAdminReport = async () => {
         try {
-            const response = await api.getAdminReport();
-            const fileName = "TISA - General Report";
+            const response = await api.getAdminAirlinesReport();
+            const fileName = "TISA - Airlines Report";
             exportToCSV(response.filter(row => row).map(row => {
                 delete row.flightsData;
                 row.averageOccupancyPercentage += "%";
                 row.totalOfIncome += "$";
                 return row;
             }), fileName);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const downloadUsersReport = async () => {
+        try {
+            const response = await api.getAdminUsersReport();
+            const fileName = "TISA - Users Report";
+            exportToCSV(response, fileName);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const downloadAirlineOrdersReport = async () => {
+        try {
+            const response = await api.getAirlineOrdersReport(airlineId);
+            const fileName = `TISA - Orders Report - ${airlineName}`;
+            exportToCSV(response.flightsOrdersData, fileName);
         } catch (e) {
             console.error(e);
         }
@@ -197,9 +218,11 @@ const Profile = () => {
 
             <div className="profileCubes">
                 {(role === Role.AirlineManager || role === Role.Admin) && <div className="profile-section">
-                    <div className="content" style={{border: "none", padding: 0, marginRight: 40}}>
-                        {role === Role.AirlineManager && <Button endIcon={<img alt={"download"} src={download}/>} variant={"outlined"} size={"small"} color={"primary"} onClick={downloadAirlineReport}>Flights Report</Button>}
-                        {role === Role.Admin && <Button endIcon={<img alt={"download"} src={download}/>} variant={"outlined"} size={"small"} color={"primary"} onClick={downloadAdminReport}>General Report</Button>}
+                    <div className="content" style={{border: "none", padding: 0, marginRight: 40, display: "flex"}}>
+                        {role === Role.AirlineManager && <div><Button endIcon={<img alt={"download"} src={download}/>} variant={"outlined"} size={"small"} color={"primary"} onClick={downloadFlightsReport}>Flights Report</Button></div>}
+                        {role === Role.AirlineManager && <div style={{marginLeft: 10}}><Button endIcon={<img alt={"download"} src={download}/>} variant={"outlined"} size={"small"} color={"primary"} onClick={downloadAirlineOrdersReport}>Orders Report</Button></div>}
+                        {role === Role.Admin && <div><Button endIcon={<img alt={"download"} src={download}/>} variant={"outlined"} size={"small"} color={"primary"} onClick={downloadAdminReport}>Airlines Report</Button></div>}
+                        {role === Role.Admin && <div style={{marginLeft: 10}}><Button endIcon={<img alt={"download"} src={download}/>} variant={"outlined"} size={"small"} color={"primary"} onClick={downloadUsersReport}>Users Report</Button></div>}
                     </div>
                 </div>}
                 <div className="profile-section">

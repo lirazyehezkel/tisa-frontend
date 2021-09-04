@@ -151,7 +151,8 @@ const Browse = () => {
                 <div className="flightsContainer">
                     {isLoading ? <div style={{textAlign: "center", padding: 20}}><img style={{height: 40}} src={spinner} alt="spinner"/></div> : <>
                         {filteredFlights?.length === 0 && <div className="noResult">No Result match your search criteria</div>}
-                        {filteredFlights?.map(flight => <div className="flightCube">
+                        {filteredFlights?.sort((a,b) => new Date(b.departureTime) > new Date(a.departureTime) ? -1 : 1)
+                            .map(flight => <div className="flightCube">
                             <div className="airlineName" onClick={() => window.open(Routes.AIRLINE.replace(":airlineId", flight.airlineId))}>
                                 <img style={{height: 18, marginRight: 5}} alt="airplane" src={airplane}/>
                                 {flight.airlineName}
