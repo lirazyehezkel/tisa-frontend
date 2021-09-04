@@ -70,7 +70,7 @@ export default AirlineReviews;
 const Review = ({review}) => <div className="reviewCube">
     <div>
         <div className="reviewerName">{review.username ?? "Guest"}</div>
-        <div className="reviewDate">{dateFormat(review.reviewDate, 'dd/mm/yyyy HH:MM')}</div>
+        <div className="reviewDate">{dateFormat(review.reviewDate, 'dd/mm/yyyy')}</div>
         <div className="reviewContent">{review.content}</div>
     </div>
     <div>

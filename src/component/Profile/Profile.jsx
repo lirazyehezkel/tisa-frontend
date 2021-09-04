@@ -158,7 +158,13 @@ const Profile = () => {
         try {
             const response = await api.getAirlineReport(airlineId);
             const fileName = `TISA - Flights Report - ${response.airlineName}`;
-            exportToCSV(response.flightsData, fileName);
+            response.flightsData.push({flightId: "SUMMARY", totalOfIncome: response.totalOfIncome, occupancyPercentage: response.averageOccupancyPercentage});
+            const csvData = response.flightsData.map(flight => {
+                flight.totalOfIncome += "$";
+                flight.occupancyPercentage += "%"
+                return flight
+            })
+            exportToCSV(csvData, fileName);
         } catch (e) {
             console.error(e);
         }
@@ -168,7 +174,12 @@ const Profile = () => {
         try {
             const response = await api.getAdminReport();
             const fileName = "TISA - General Report";
-            // exportToCSV(response.flightsData, fileName);
+            exportToCSV(response.filter(row => row).map(row => {
+                delete row.flightsData;
+                row.averageOccupancyPercentage += "%";
+                row.totalOfIncome += "$";
+                return row;
+            }), fileName);
         } catch (e) {
             console.error(e);
         }
