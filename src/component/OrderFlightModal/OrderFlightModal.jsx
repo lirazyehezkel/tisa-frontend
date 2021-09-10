@@ -12,7 +12,7 @@ import plusIcon from "../../assets/images/plusIconDark.svg";
 import * as dateFormat from "dateformat";
 import {toast} from "react-toastify";
 import airplane from "../../assets/images/airplane.png";
-import {Routes} from "../../constants/routes";
+import {Routes} from "../../helpers/consts";
 
 const OrderFlightModal = ({isOpen, onClose, flightId}) => {
 

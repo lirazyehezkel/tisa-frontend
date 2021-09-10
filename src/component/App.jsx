@@ -5,12 +5,11 @@ import AppSwitchRoutes from "./AppSwitchRoutes";
 import logo from '../assets/images/tisa-logo.png';
 import profile from '../assets/images/user.png';
 import LoginModal from "./LoginModal/LoginModal";
-import {Routes} from '../constants/routes';
 import {createTheme, MuiThemeProvider} from "@material-ui/core";
 import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {CookiesProvider, useCookies} from "react-cookie";
-import {tisaCookie} from "../helpers/consts";
+import {Routes, tisaCookie} from "../helpers/consts";
 
 const theme = createTheme({
     palette: {

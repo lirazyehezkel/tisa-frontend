@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Modal from "@material-ui/core/Modal";
 import '../LoginModal/LoginModal.css';
 import Api from "../../helpers/api";
@@ -15,6 +15,11 @@ const NewReviewModal = ({isOpen, onClose, airlineId}) => {
     const [reviewContent, setReviewContent] = useState("");
     const [cookies, setCookie, removeCookie] = useCookies();
     const username = cookies?.tisaAuth?.username;
+
+    useEffect(() => {
+        setRating(0);
+        setReviewContent("");
+    },[isOpen])
 
     const sendReview = async () => {
         try {

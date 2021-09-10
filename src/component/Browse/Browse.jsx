@@ -13,7 +13,7 @@ import * as dateFormat from 'dateformat';
 import spinner from '../../assets/images/spinner.svg';
 import OrderFlightModal from "../OrderFlightModal/OrderFlightModal";
 import {formatInputRangeDate} from "../../helpers/helpers";
-import {Routes} from "../../constants/routes";
+import {Routes} from "../../helpers/consts";
 
 const sectionStyle = {
     width: "100%",
